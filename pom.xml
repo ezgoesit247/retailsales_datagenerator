@@ -1,0 +1,266 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.capgemini.datagen</groupId>
+	<artifactId>retailsalesgenerator</artifactId>
+	<version>1.0</version>
+
+	<repositories>
+		<repository>
+			<id>benerator-repo</id>
+			<url>http://databene.org/m2/</url>
+		</repository>
+	</repositories>
+
+	<properties>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <!-- <project.build.source.encoding>UTF-8</project.build.source.encoding> -->
+    <!-- <project.reporting.output.encoding>UTF-8</project.reporting.output.encoding> -->
+	
+		<!--persistence -->
+		<org.hibernate.javax.persistence.hibernate-jpa-2.1-api.version>1.0.2.Final</org.hibernate.javax.persistence.hibernate-jpa-2.1-api.version>
+	
+		<!-- benerator -->
+		<org.databene.jdbacl.version>0.8.19</org.databene.jdbacl.version>
+		<org.databene.databene-webdecs.version>0.7.1</org.databene.databene-webdecs.version>
+		<org.databene.databene-commons.version>1.0.11</org.databene.databene-commons.version>
+		<org.databene.contiperf.version>2.3.4</org.databene.contiperf.version>
+		<org.databene.dbsanity.version>0.9.4</org.databene.dbsanity.version>
+		<!-- plugins -->
+		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
+		<java.version>1.8</java.version>
+
+		<org.slf4j.slf4j-log4j12.version>1.6.4</org.slf4j.slf4j-log4j12.version>
+		<log4j.log4j.version>1.2.16</log4j.log4j.version>
+
+		<log4j.version>1.2.17</log4j.version>
+		<h2.version>1.4.200</h2.version>
+	</properties>
+
+	<packaging>jar</packaging>
+	<name>mysqlretailsales data generation project</name>
+	<description>Start populating the database by typing 'mvn benerator:generate' on the command line.</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.1-api</artifactId>
+			<version>${org.hibernate.javax.persistence.hibernate-jpa-2.1-api.version}</version>
+		</dependency>
+
+    <!-- benerator -->
+    <dependency>
+      <groupId>org.databene</groupId>
+      <artifactId>dbsanity</artifactId>
+      <version>${org.databene.dbsanity.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.databene</groupId>
+      <artifactId>jdbacl</artifactId>
+      <version>${org.databene.jdbacl.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.databene</groupId>
+      <artifactId>databene-webdecs</artifactId>
+      <version>${org.databene.databene-webdecs.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.databene</groupId>
+      <artifactId>databene-commons</artifactId>
+      <version>${org.databene.databene-commons.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.databene</groupId>
+      <artifactId>contiperf</artifactId>
+      <version>${org.databene.contiperf.version}</version>
+    </dependency>
+
+  <!-- EXECUTABLE JAR -->
+<!--
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+      <version>3.6.3</version>
+    </dependency>
+-->
+<!-- 
+    <dependency>
+      <groupId></groupId>
+      <artifactId></artifactId>
+      <version></version>
+    </dependency>
+-->
+  </dependencies>
+
+	<build>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.databene</groupId>
+				<artifactId>benerator-maven-plugin</artifactId>
+				<version>0.9.8</version>
+				<configuration>
+					<descriptor>benerator.xml</descriptor>
+					<encoding>Cp1252</encoding>
+					<validate>true</validate>
+					<dbUrl>jdbc:mysql://localhost:3306/retailsales</dbUrl>
+					<dbDriver>com.mysql.cj.jdbc.Driver</dbDriver>
+					<dbSchema>retailsales</dbSchema>
+					<dbUser>retailsales</dbUser>
+					<dbPassword>P@ssw0rd!</dbPassword>
+				</configuration>
+
+				<dependencies>
+					<!-- Since Oracle's drivers are proprietary, you need to install them 
+						yourself. You can download these at http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html 
+						<dependency> <groupId>com.oracle</groupId> <artifactId>ojdbc6</artifactId> 
+						<version>11.1.0.7</version> <scope>provided</scope> </dependency> -->
+
+					<!-- Since the DB2 driver is proprietary, you need to install it yourself. 
+						You can download it at http://www-306.ibm.com/software/data/db2/java <dependency> 
+						<groupId>com.ibm</groupId> <artifactId>db2jcc</artifactId> <version>3.50.152</version> 
+						<scope>provided</scope> </dependency> -->
+
+					<dependency>
+						<groupId>net.sourceforge.jtds</groupId> <!-- MS SQL server and Sybase -->
+						<artifactId>jtds</artifactId>
+						<version>1.2.2</version>
+						<scope>runtime</scope>
+					</dependency>
+					<dependency>
+						<groupId>mysql</groupId>
+						<artifactId>mysql-connector-java</artifactId>
+						<version>8.0.19</version>
+						<scope>runtime</scope>
+					</dependency>
+					<dependency>
+						<groupId>hsqldb</groupId>
+						<artifactId>hsqldb</artifactId>
+						<version>1.8.0.7</version>
+						<scope>runtime</scope>
+					</dependency>
+					<dependency>
+						<groupId>com.h2database</groupId>
+						<artifactId>h2</artifactId>
+						<version>1.2.132</version>
+						<scope>runtime</scope>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.derby</groupId>
+						<artifactId>derbyclient</artifactId>
+						<version>10.4.2.0</version>
+						<scope>runtime</scope>
+					</dependency>
+					<dependency>
+						<groupId>net.sf.squirrel-sql.thirdparty-non-maven</groupId>
+						<artifactId>jaybird</artifactId>
+						<version>2.1.6</version>
+						<scope>runtime</scope>
+					</dependency>
+					<dependency>
+						<groupId>postgresql</groupId>
+						<artifactId>postgresql</artifactId>
+						<version>8.3-603.jdbc4</version>
+						<scope>runtime</scope>
+					</dependency>
+
+					<dependency>
+						<groupId>org.apache.poi</groupId>
+						<artifactId>poi</artifactId>
+						<version>3.8</version>
+						<scope>runtime</scope>
+					</dependency>
+
+					<!-- logging -->
+					<dependency>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+						<version>1.6.4</version>
+					</dependency>
+					<dependency>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+						<version>1.6.4</version>
+						<scope>runtime</scope>
+					</dependency>
+					<dependency>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+						<version>1.2.16</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+  <!-- EXECUTABLE JAR -->
+<!--  
+    <plugin>
+      <artifactId>maven-assembly-plugin</artifactId>
+      <configuration>
+        <descriptorRefs>
+          <descriptorRef>jar-with-dependencies</descriptorRef>
+        </descriptorRefs>
+        <archive>
+          <manifest>
+            <mainClass>org.apache.maven.cli.MavenCli</mainClass>
+          </manifest>
+        </archive>
+      </configuration>
+    </plugin>
+-->
+<!--			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-dependency-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <id>copy-dependencies</id>
+			            <phase>prepare-package</phase>
+			            <goals>
+			                <goal>copy-dependencies</goal>
+			            </goals>
+			            <configuration>
+			                <outputDirectory>
+			                    ${project.build.directory}/libs
+			                </outputDirectory>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
+
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-jar-plugin</artifactId>
+			    <configuration>
+			        <archive>
+			            <manifest>
+			                <addClasspath>true</addClasspath>
+			                <classpathPrefix>libs/</classpathPrefix>
+			                <mainClass>
+			                    org.apache.maven.cli.MavenCli
+			                </mainClass>
+			            </manifest>
+			        </archive>
+			    </configuration>
+			</plugin>
+-->
+		</plugins>
+	</build>
+
+</project>
