@@ -2,15 +2,13 @@
 <setup xmlns="http://databene.org/benerator/0.9.8"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://databene.org/benerator/0.9.8 benerator-0.9.8.xsd"
-        defaultPageSize="1000"
+        defaultPageSize="10000"
         defaultEncoding="Cp1252"
         defaultDataset="US"
         defaultLocale="en_US"
         defaultLineSeparator="\r\n">
 
-	<comment>
-		 Populates a database
-	</comment>
+	<comment>Populates a database</comment>
 	 
 	<include uri="benerator.properties" />
 
@@ -20,11 +18,9 @@
 		password="{database.pwd}" batch="true" />
 
 	<comment>Creating tables</comment>
+	  <execute uri="{db_init.script}" target="db" />
 	
-	
-  <execute uri="retailsales_autonum.sql" target="db" />
-	
-	
+	<comment>Generating</comment>
 	<generate type="DimProductCategory" consumer="db" minCount="{category.min}" maxCount="{category.max}">
 		<id mode="ignored" />
 		<attribute name="Category" unique="true" pattern="[A-Z]{1}[a-z]{6,10}"/>
@@ -77,22 +73,22 @@
 
 <!-- 
 
-    // CHASING DOWN DUPLICATES
-		select VendorKey,ProductKey, COUNT(*)
-		from VendorProduct
-		group by VendorKey,ProductKey
-		having COUNT(*) > 1
-		
-		select vp.PK,vp.VendorKey,vp.ProductKey from VendorProduct vp
-		join VendorProduct vp1 on vp1.VendorKey = vp.VendorKey
-		  and vp1.ProductKey = vp.ProductKey
-		  and vp.PK > vp1.PK
-		
-		// DELETES ANY DUPLICATE Vendor/Product COMBOS - SAVES "FIRST" ENTRY
-		delete vp from VendorProduct vp
-		join VendorProduct vp1 on vp1.VendorKey = vp.VendorKey
-		  and vp1.ProductKey = vp.ProductKey
-		  and vp.PK > vp1.PK
+  // CHASING DOWN DUPLICATES
+select VendorKey,ProductKey, COUNT(*) \
+from VendorProduct \
+group by VendorKey,ProductKey \
+having COUNT(*) > 1;
+
+select vp.PK,vp.VendorKey,vp.ProductKey from VendorProduct vp
+join VendorProduct vp1 on vp1.VendorKey = vp.VendorKey
+  and vp1.ProductKey = vp.ProductKey
+  and vp.PK > vp1.PK;
+
+// DELETES ANY DUPLICATE Vendor/Product COMBOS - SAVES "FIRST" ENTRY
+delete vp from VendorProduct vp
+join VendorProduct vp1 on vp1.VendorKey = vp.VendorKey
+  and vp1.ProductKey = vp.ProductKey
+  and vp.PK > vp1.PK;
 
  -->
  <!--
@@ -126,7 +122,9 @@ having COUNT(*) > 1
    	<property name="maxTime" value="22:00:00"/>
    	<property name="timeGranularity" value="00:00:01"/>
    	<property name="timeDistribution" value="{new CumulatedSequence()}"/>
-</bean>
+   </bean>
+
+  <!-- NEED TO DO SOMETHING -->
 	<generate type="Sales" consumer="db" count="{sales.count}">
  			<reference name="ProductKey" targetType="DimProduct" distribution="random" source="db"/>
  			<reference name="CustomerKey" targetType="DimCustomer" distribution="random" source="db"/>

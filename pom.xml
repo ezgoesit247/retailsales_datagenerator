@@ -26,9 +26,10 @@
 		<org.hibernate.javax.persistence.hibernate-jpa-2.1-api.version>1.0.2.Final</org.hibernate.javax.persistence.hibernate-jpa-2.1-api.version>
 	
 		<!-- benerator -->
+    <build_number>${buildNumber}</build_number>
 		<org.databene.jdbacl.version>0.8.19</org.databene.jdbacl.version>
 		<org.databene.databene-webdecs.version>0.7.1</org.databene.databene-webdecs.version>
-		<org.databene.databene-commons.version>1.0.11</org.databene.databene-commons.version>
+		<org.databene.databene-commons.version>1.0.12</org.databene.databene-commons.version>
 		<org.databene.contiperf.version>2.3.4</org.databene.contiperf.version>
 		<org.databene.dbsanity.version>0.9.4</org.databene.dbsanity.version>
 		<!-- plugins -->
@@ -121,11 +122,11 @@
 					<descriptor>benerator.xml</descriptor>
 					<encoding>Cp1252</encoding>
 					<validate>true</validate>
-					<dbUrl>jdbc:mysql://localhost:3306/retailsales</dbUrl>
-					<dbDriver>com.mysql.cj.jdbc.Driver</dbDriver>
-					<dbSchema>retailsales</dbSchema>
-					<dbUser>retailsales</dbUser>
-					<dbPassword>P@ssw0rd!</dbPassword>
+					<!-- <dbUrl>jdbc:mysql://localhost:3306/retailsales</dbUrl> -->
+					<!-- <dbDriver>com.mysql.cj.jdbc.Driver</dbDriver> -->
+					<!-- <dbSchema>retailsales</dbSchema> -->
+					<!-- <dbUser>retailsales</dbUser> -->
+					<!-- <dbPassword>P@ssw0rd!</dbPassword> -->
 				</configuration>
 
 				<dependencies>

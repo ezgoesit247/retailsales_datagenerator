@@ -464,7 +464,7 @@
     <xs:element name="generate">
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
-				<xs:element ref="comment"         minOccurs="0" />
+				        <xs:element ref="comment"         minOccurs="0" />
                 <xs:element ref="value"           minOccurs="0" />
                 <xs:element ref="id"              minOccurs="0" />
                 <xs:element ref="compositeId"     minOccurs="0" />
