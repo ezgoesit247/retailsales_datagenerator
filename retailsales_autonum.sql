@@ -1,23 +1,23 @@
 SET FOREIGN_KEY_CHECKS=1;
 
-DROP TABLE IF EXISTS `retailsales`.`Sales`;
-DROP TABLE IF EXISTS `retailsales`.`VendorProduct`;
-DROP TABLE IF EXISTS `retailsales`.`DimVendor`;
---DROP TABLE IF EXISTS `retailsales`.`ModelVendor`;
---DROP TABLE IF EXISTS `retailsales`.`VendorBrand`;
---DROP TABLE IF EXISTS `retailsales`.`ModelVendorBridge`;
---DROP TABLE IF EXISTS `retailsales`.`VendorBrandBridge`;
-DROP TABLE IF EXISTS `retailsales`.`DimBrand`;
-DROP TABLE IF EXISTS `retailsales`.`DimModel`;
-DROP TABLE IF EXISTS `retailsales`.`DimProduct`;
-DROP TABLE IF EXISTS `retailsales`.`DimProductSubcategory`;
-DROP TABLE IF EXISTS `retailsales`.`DimProductCategory`;
---DROP TABLE IF EXISTS `retailsales`.`DimPromotion`;
---DROP TABLE IF EXISTS `retailsales`.`DimCurrency`;
-DROP TABLE IF EXISTS `retailsales`.`DimCustomer`;
-DROP TABLE IF EXISTS `retailsales`.`DimDate`;
-DROP TABLE IF EXISTS `retailsales`.`DimGeography`;
---DROP TABLE IF EXISTS `retailsales`.`DimSalesTerritory`;
+DROP TABLE IF EXISTS `retailsales_datagenerator`.`Sales`;
+DROP TABLE IF EXISTS `retailsales_datagenerator`.`VendorProduct`;
+DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimVendor`;
+--DROP TABLE IF EXISTS `retailsales_datagenerator`.`ModelVendor`;
+--DROP TABLE IF EXISTS `retailsales_datagenerator`.`VendorBrand`;
+--DROP TABLE IF EXISTS `retailsales_datagenerator`.`ModelVendorBridge`;
+--DROP TABLE IF EXISTS `retailsales_datagenerator`.`VendorBrandBridge`;
+DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimBrand`;
+DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimModel`;
+DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimProduct`;
+DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimProductSubcategory`;
+DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimProductCategory`;
+--DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimPromotion`;
+--DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimCurrency`;
+DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimCustomer`;
+DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimDate`;
+DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimGeography`;
+--DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimSalesTerritory`;
 
 
 
@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `retailsales`.`DimGeography`;
   
 
 #DimProductCategory*/
-CREATE TABLE `retailsales`.`DimProductCategory` (
+CREATE TABLE `retailsales_datagenerator`.`DimProductCategory` (
   `CategoryKey` int unsigned NOT NULL AUTO_INCREMENT,
   `Category` nvarchar(50) NOT NULL,
   PRIMARY KEY (`CategoryKey`)
@@ -34,22 +34,22 @@ CREATE TABLE `retailsales`.`DimProductCategory` (
   
 
 #DimProductSubcategory*/
-CREATE TABLE `retailsales`.`DimProductSubcategory` (
+CREATE TABLE `retailsales_datagenerator`.`DimProductSubcategory` (
   `SubcategoryKey` int unsigned NOT NULL AUTO_INCREMENT,
   `Subcategory` nvarchar(50) NOT NULL,
   `CategoryKey` int unsigned NOT NULL,
   PRIMARY KEY (`SubcategoryKey`)
   
-, CONSTRAINT `FKretailsales_DimProductSubcategory_CategoryKey` 
+, CONSTRAINT `FKretailsales_datagenerator_DimProductSubcategory_CategoryKey` 
   FOREIGN KEY(`CategoryKey`)
-  REFERENCES `retailsales`.`DimProductCategory` (`CategoryKey`)
+  REFERENCES `retailsales_datagenerator`.`DimProductCategory` (`CategoryKey`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
 
 #DimProduct*/
-CREATE TABLE `retailsales`.`DimProduct` (
+CREATE TABLE `retailsales_datagenerator`.`DimProduct` (
   `ProductKey` int unsigned NOT NULL AUTO_INCREMENT,
   `SubcategoryKey` int unsigned NOT NULL,
   `StandardCost` decimal(9,4) NULL,
@@ -61,23 +61,23 @@ CREATE TABLE `retailsales`.`DimProduct` (
   `WeightUnitMeasureCode` nchar(3) NULL,
   PRIMARY KEY (`ProductKey`)
   
-, CONSTRAINT `FKretailsales_DimProduct_SubcategoryKey` 
+, CONSTRAINT `FKretailsales_datagenerator_DimProduct_SubcategoryKey` 
   FOREIGN KEY(`SubcategoryKey`)
-  REFERENCES `retailsales`.`DimProductSubcategory` (`SubcategoryKey`)
+  REFERENCES `retailsales_datagenerator`.`DimProductSubcategory` (`SubcategoryKey`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
   
 #DimModel*/
-CREATE TABLE `retailsales`.`DimModel` (
+CREATE TABLE `retailsales_datagenerator`.`DimModel` (
   `ModelKey` int unsigned NOT NULL,
   `ProductKey` int unsigned NOT NULL,
   `Model` nvarchar(50) NOT NULL,
   PRIMARY KEY (`ModelKey`)
   
-, CONSTRAINT `FKretailsales_DimModel_ProductKey` 
+, CONSTRAINT `FKretailsales_datagenerator_DimModel_ProductKey` 
   FOREIGN KEY(`ProductKey`)
-  REFERENCES `retailsales`.`DimProduct` (`ProductKey`)
+  REFERENCES `retailsales_datagenerator`.`DimProduct` (`ProductKey`)
   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -85,22 +85,22 @@ CREATE TABLE `retailsales`.`DimModel` (
 
 
 #DimBrand*/
-CREATE TABLE `retailsales`.`DimBrand` (
+CREATE TABLE `retailsales_datagenerator`.`DimBrand` (
   `BrandKey` int unsigned NOT NULL,
   `ProductKey` int unsigned NOT NULL,
   `Brand` nvarchar(50) NOT NULL,
   PRIMARY KEY (`BrandKey`)
   
-, CONSTRAINT `FKretailsales_DimBrand_ProductKey` 
+, CONSTRAINT `FKretailsales_datagenerator_DimBrand_ProductKey` 
   FOREIGN KEY(`ProductKey`)
-  REFERENCES `retailsales`.`DimProduct` (`ProductKey`)
+  REFERENCES `retailsales_datagenerator`.`DimProduct` (`ProductKey`)
   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
 #DimVendor*/
-CREATE TABLE `retailsales`.`DimVendor` (
+CREATE TABLE `retailsales_datagenerator`.`DimVendor` (
   `VendorKey` int unsigned NOT NULL AUTO_INCREMENT,
   `Vendor` nvarchar(50) NOT NULL,
   PRIMARY KEY (`VendorKey`)
@@ -108,19 +108,19 @@ CREATE TABLE `retailsales`.`DimVendor` (
 
 
 #VendorProduct*/
-CREATE TABLE `retailsales`.`VendorProduct` (
+CREATE TABLE `retailsales_datagenerator`.`VendorProduct` (
   `PK` int unsigned NOT NULL AUTO_INCREMENT,
   `VendorKey` int unsigned NOT NULL,
   `ProductKey` int unsigned NOT NULL,
   PRIMARY KEY (`PK`)
   
-, CONSTRAINT `FKretailsales_VendorProduct_ProductKey` 
+, CONSTRAINT `FKretailsales_datagenerator_VendorProduct_ProductKey` 
   FOREIGN KEY(`ProductKey`)
-  REFERENCES `retailsales`.`DimProduct` (`ProductKey`)
+  REFERENCES `retailsales_datagenerator`.`DimProduct` (`ProductKey`)
   
-, CONSTRAINT `FKretailsales_VendorProduct_VendorKey` 
+, CONSTRAINT `FKretailsales_datagenerator_VendorProduct_VendorKey` 
   FOREIGN KEY(`VendorKey`)
-  REFERENCES `retailsales`.`DimVendor` (`VendorKey`)
+  REFERENCES `retailsales_datagenerator`.`DimVendor` (`VendorKey`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -131,7 +131,7 @@ CREATE TABLE `retailsales`.`VendorProduct` (
   
 
 #Geography*/
-CREATE TABLE `retailsales`.`DimGeography` (
+CREATE TABLE `retailsales_datagenerator`.`DimGeography` (
   `GeographyKey` int unsigned NOT NULL AUTO_INCREMENT,
   `City` nvarchar(50) NULL,
   `StateProvinceCode` varchar(3) NULL,
@@ -145,16 +145,16 @@ CREATE TABLE `retailsales`.`DimGeography` (
 
   
 #DimCustomer*/
-CREATE TABLE `retailsales`.`DimCustomer` (
+CREATE TABLE `retailsales_datagenerator`.`DimCustomer` (
   `CustomerKey` int unsigned NOT NULL AUTO_INCREMENT,
   `GeographyKey` int unsigned NOT NULL,
   `FirstName` nvarchar(50) NULL,
   `LastName` nvarchar(50) NULL,
   PRIMARY KEY (`CustomerKey`)
   
-, CONSTRAINT `FKretailsales_DimCustomer_GeographyKey` 
+, CONSTRAINT `FKretailsales_datagenerator_DimCustomer_GeographyKey` 
   FOREIGN KEY(`GeographyKey`)
-  REFERENCES `retailsales`.`DimGeography` (`GeographyKey`)
+  REFERENCES `retailsales_datagenerator`.`DimGeography` (`GeographyKey`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -162,7 +162,7 @@ CREATE TABLE `retailsales`.`DimCustomer` (
   
 
 #Sales*/
-CREATE TABLE `retailsales`.`Sales` (
+CREATE TABLE `retailsales_datagenerator`.`Sales` (
   `ProductKey` int unsigned NOT NULL,
   `CustomerKey` int unsigned NOT NULL,
   `SalesOrderNumber` nvarchar(50) NOT NULL,
@@ -172,13 +172,13 @@ CREATE TABLE `retailsales`.`Sales` (
   `TransactionDate` datetime NULL,
   PRIMARY KEY (`SalesOrderNumber`,`SalesOrderLineNumber`)
   
-, CONSTRAINT `FKretailsales_FactInternetSales_ProductKey` 
+, CONSTRAINT `FKretailsales_datagenerator_FactInternetSales_ProductKey` 
   FOREIGN KEY(`ProductKey`)
-  REFERENCES `retailsales`.`DimProduct` (`ProductKey`),
+  REFERENCES `retailsales_datagenerator`.`DimProduct` (`ProductKey`),
   
-  CONSTRAINT `FKretailsales_FactInternetSales_CustomerKey` 
+  CONSTRAINT `FKretailsales_datagenerator_FactInternetSales_CustomerKey` 
   FOREIGN KEY(`CustomerKey`)
-  REFERENCES `retailsales`.`DimCustomer` (`CustomerKey`)
+  REFERENCES `retailsales_datagenerator`.`DimCustomer` (`CustomerKey`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
