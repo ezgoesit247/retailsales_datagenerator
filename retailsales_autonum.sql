@@ -1,25 +1,5 @@
 SET FOREIGN_KEY_CHECKS=1;
 
-DROP TABLE IF EXISTS `retailsales_datagenerator`.`Sales`;
-DROP TABLE IF EXISTS `retailsales_datagenerator`.`VendorProduct`;
-DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimVendor`;
---DROP TABLE IF EXISTS `retailsales_datagenerator`.`ModelVendor`;
---DROP TABLE IF EXISTS `retailsales_datagenerator`.`VendorBrand`;
---DROP TABLE IF EXISTS `retailsales_datagenerator`.`ModelVendorBridge`;
---DROP TABLE IF EXISTS `retailsales_datagenerator`.`VendorBrandBridge`;
-DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimModel`;
-DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimProduct`;
-DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimProductSubcategory`;
-DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimProductCategory`;
-DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimBrand`;
---DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimPromotion`;
---DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimCurrency`;
-DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimCustomer`;
-DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimDate`;
-DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimGeography`;
---DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimSalesTerritory`;
-
-
 
 
   
@@ -128,27 +108,10 @@ CREATE TABLE `retailsales_datagenerator`.`VendorProduct` (
   REFERENCES `retailsales_datagenerator`.`DimVendor` (`VendorKey`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-  
   
 
-  
 
-#Geography*/
-CREATE TABLE `retailsales_datagenerator`.`DimGeography` (
-  `GeographyKey` int unsigned NOT NULL AUTO_INCREMENT,
-  `City` nvarchar(50) NULL,
-  `StateProvinceCode` varchar(3) NULL,
-  `StateProvinceName` nvarchar(50) NULL,
-  `CountryRegionCode` nvarchar(3) NULL,
-  `CountryRegionName` nvarchar(50) NULL,
-  `PostalCode` nvarchar(15) NOT NULL,
-  PRIMARY KEY (`GeographyKey`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-  
 
-  
 #DimCustomer*/
 CREATE TABLE `retailsales_datagenerator`.`DimCustomer` (
   `CustomerKey` int unsigned NOT NULL AUTO_INCREMENT,
@@ -189,7 +152,7 @@ CREATE TABLE `retailsales_datagenerator`.`Sales` (
 
 
 
-INSERT INTO DimGeography (City,StateProvinceCode,StateProvinceName,CountryRegionCode,CountryRegionName,PostalCode) VALUES
- ('DOWNERS GROVE','IL','ILLINOIS','US','UNITED STATES','60515')
-,('DOWNERS GROVE','IL','ILLINOIS','US','UNITED STATES','60516');
+--INSERT INTO DimGeography (City,StateProvinceCode,StateProvinceName,CountryRegionCode,CountryRegionName,PostalCode) VALUES
+-- ('DOWNERS GROVE','IL','ILLINOIS','US','UNITED STATES','60515')
+--,('DOWNERS GROVE','IL','ILLINOIS','US','UNITED STATES','60516');
 

@@ -2,7 +2,7 @@
 <setup xmlns="http://databene.org/benerator/0.9.8"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://databene.org/benerator/0.9.8 benerator-0.9.8.xsd"
-        defaultPageSize="100000"
+        defaultPageSize="10000"
         defaultEncoding="Cp1252"
         defaultDataset="US"
         defaultLocale="en_US"
@@ -17,8 +17,14 @@
 		driver="{database.driver}" catalog="{database.name}" user="{database.user}"
 		password="{database.pwd}" batch="true" />
 
+<comment>Clearing Tables</comment>
+	  <execute uri="delete-tables.sql" target="db" />
+
+	<comment>Loading Goegraphy Tables</comment>
+	  <execute uri="{sql.load.zipcodes.script}" target="db" />
+
 	<comment>Creating tables</comment>
-	  <execute uri="{db_init.script}" target="db" />
+	  <execute uri="{sql.db.init.script}" target="db" />
 	
 	<comment>Generating</comment>
 	<generate type="DimProductCategory" consumer="db" minCount="{category.cnt}" maxCount="{category.cnt}">
@@ -33,7 +39,7 @@
   </generate>
 
    <generate type="DimBrand" consumer="db" minCount="{brand.cnt}" maxCount="{brand.cnt}">
-     <id mode="ignored" />
+     <id name="BrandKey" generator="LocalSequenceGenerator" />
      <attribute name="Brand" pattern="{brand.pattern}"/>
    
 	  <generate type="DimProduct" consumer="db" minCount="{product.min}" maxCount="{product.max}">
@@ -43,15 +49,7 @@
 	    <attribute name="Product" unique="true" pattern="[A-Z]{1}[a-z]{14,20}"/>
 	    <attribute name="ListPrice" type="big_decimal" distribution="cumulated" pattern="{unitprice.pattern}"/>
 	  </generate>
-	  
-	  <!-- <generate type="DimModel" consumer="db" minCount="{model.min}" maxCount="{model.max}">
-	    <id mode="ignored" />
-	    <attribute name="Model" pattern="{model.pattern}"/>
-	    <reference name="ProductKey" targetType="DimProduct" distribution="random" source="db"/>
-	    <attribute name="ProductKey" script="{DimProduct.ProductKey}"/>
-	  </generate> -->
   
-  	  <!-- <attribute name="ProductKey" script="{DimProduct.ProductKey}"/> -->
 	</generate>
 
 	  <generate type="DimModel" consumer="db" minCount="{product.max * brand.cnt}" maxCount="{product.max * brand.cnt}">
@@ -121,8 +119,7 @@ having COUNT(*) > 1
   </execute>
  -->
 
-
-   <bean id="dt" class="DateTimeGenerator"> 
+    <bean id="dt" class="DateTimeGenerator"> 
    	<property name="minDate" value="2019-07-01"/>
    	<property name="maxDate" value="2019-12-31"/>
    	<property name="dateGranularity" value="0000-00-01"/>
@@ -133,10 +130,9 @@ having COUNT(*) > 1
    	<property name="timeDistribution" value="{new CumulatedSequence()}"/>
    </bean>
 
-  <!-- NEED TO DO SOMETHING -->
 	<generate type="Sales" consumer="db" count="{sales.cnt}">
- 			<reference name="ProductKey" targetType="DimProduct" distribution="random" source="db"/>
- 			<reference name="CustomerKey" targetType="DimCustomer" distribution="random" source="db"/>
+ 			<reference name="ProductKey" targetType="DimProduct" distribution="cumulated" source="db"/>
+ 			<reference name="CustomerKey" targetType="DimCustomer" distribution="cumulated" source="db"/>
  			<attribute name="SalesOrderNumber" unique="true"/>
  			<attribute name="SalesOrderLineNumber" />
  			<attribute name="Quantity" distribution="random" pattern="{quantity.pattern}"/>
@@ -144,6 +140,8 @@ having COUNT(*) > 1
 	</generate>
 
 	<comment>Cleanup VendorProduct</comment>
-	  <execute uri="{db_cleanup.script}" target="db" />
+	  <execute uri="{sql.db.cleanup.script}" target="db" />
 
-</setup>
+
+ 
+ </setup>
