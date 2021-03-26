@@ -7,11 +7,11 @@ DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimVendor`;
 --DROP TABLE IF EXISTS `retailsales_datagenerator`.`VendorBrand`;
 --DROP TABLE IF EXISTS `retailsales_datagenerator`.`ModelVendorBridge`;
 --DROP TABLE IF EXISTS `retailsales_datagenerator`.`VendorBrandBridge`;
-DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimBrand`;
 DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimModel`;
 DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimProduct`;
 DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimProductSubcategory`;
 DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimProductCategory`;
+DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimBrand`;
 --DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimPromotion`;
 --DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimCurrency`;
 DROP TABLE IF EXISTS `retailsales_datagenerator`.`DimCustomer`;
@@ -48,10 +48,27 @@ CREATE TABLE `retailsales_datagenerator`.`DimProductSubcategory` (
 
 
 
+#DimBrand*/
+CREATE TABLE `retailsales_datagenerator`.`DimBrand` (
+  `BrandKey` int unsigned NOT NULL,
+--  `ProductKey` int unsigned NOT NULL,
+  `Brand` nvarchar(50) NOT NULL,
+  PRIMARY KEY (`BrandKey`)
+  
+--, CONSTRAINT `FKretailsales_datagenerator_DimBrand_ProductKey` 
+--  FOREIGN KEY(`ProductKey`)
+--  REFERENCES `retailsales_datagenerator`.`DimProduct` (`ProductKey`)
+  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
 #DimProduct*/
 CREATE TABLE `retailsales_datagenerator`.`DimProduct` (
   `ProductKey` int unsigned NOT NULL AUTO_INCREMENT,
   `SubcategoryKey` int unsigned NOT NULL,
+  `BrandKey` int unsigned NOT NULL,
   `StandardCost` decimal(9,4) NULL,
   `ListPrice` decimal(9,4) NOT NULL,
   `Product` nvarchar(50) NOT NULL,
@@ -64,6 +81,10 @@ CREATE TABLE `retailsales_datagenerator`.`DimProduct` (
 , CONSTRAINT `FKretailsales_datagenerator_DimProduct_SubcategoryKey` 
   FOREIGN KEY(`SubcategoryKey`)
   REFERENCES `retailsales_datagenerator`.`DimProductSubcategory` (`SubcategoryKey`)
+  
+, CONSTRAINT `FKretailsales_datagenerator_DimProduct_BrandKey` 
+  FOREIGN KEY(`BrandKey`)
+  REFERENCES `retailsales_datagenerator`.`DimBrand` (`BrandKey`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -76,22 +97,6 @@ CREATE TABLE `retailsales_datagenerator`.`DimModel` (
   PRIMARY KEY (`ModelKey`)
   
 , CONSTRAINT `FKretailsales_datagenerator_DimModel_ProductKey` 
-  FOREIGN KEY(`ProductKey`)
-  REFERENCES `retailsales_datagenerator`.`DimProduct` (`ProductKey`)
-  
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-
-#DimBrand*/
-CREATE TABLE `retailsales_datagenerator`.`DimBrand` (
-  `BrandKey` int unsigned NOT NULL,
-  `ProductKey` int unsigned NOT NULL,
-  `Brand` nvarchar(50) NOT NULL,
-  PRIMARY KEY (`BrandKey`)
-  
-, CONSTRAINT `FKretailsales_datagenerator_DimBrand_ProductKey` 
   FOREIGN KEY(`ProductKey`)
   REFERENCES `retailsales_datagenerator`.`DimProduct` (`ProductKey`)
   
